@@ -54,25 +54,30 @@ def chunk_text(text, chunk_size, overlap):
 def process_all_pdfs():
     """Extract, clean, chunk, and save all PDFs."""
 
+     # Get list of all PDF files in the raw data directory
     pdf_files = [f for f in os.listdir(RAW_NOTES_DIR) if f.endswith(".pdf")]
 
     for filename in pdf_files:
         pdf_path = os.path.join(RAW_NOTES_DIR, filename)
         print(f"Processing: {filename}")
         
-        # Call previous function to extract and clean text
+        # Extract and clean text from the PDF
         text = extract_text_from_pdf(pdf_path)
 
         if not text:
             print(f"No text found in {filename}")
             continue
 
+        # Process the text into chunks of different sizes
         for size in CHUNK_SIZES:
-            overlap = max(10, size // 10)
+            overlap = max(10, size // 10)  # Overlap of 10%
             chunks = chunk_text(text, chunk_size=size, overlap=overlap)
+
+            # Create output filename
             output_filename = filename.replace(".pdf", f"_chunks_{size}.txt")
             output_path = os.path.join(CHUNKED_DIRS[size], output_filename)
 
+            # Write the chunks to the output file
             with open(output_path, "w", encoding="utf-8") as f:
                 for idx, chunk in enumerate(chunks):
                     f.write(f"Chunk {idx + 1}:\n{chunk}\n\n---\n\n")
