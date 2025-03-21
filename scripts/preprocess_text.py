@@ -80,6 +80,8 @@ def process_all_pdfs():
             # Write the chunks to the output file
             with open(output_path, "w", encoding="utf-8") as f:
                 for idx, chunk in enumerate(chunks):
+
+                    # Divide chunks and add headers
                     f.write(f"Chunk {idx + 1}:\n{chunk}\n\n---\n\n")
 
             print(f"Saved {len(chunks)} chunks of size {size} to: {output_path}")
