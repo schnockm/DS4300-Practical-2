@@ -60,7 +60,7 @@ def process_all_pdfs():
         pdf_path = os.path.join(RAW_NOTES_DIR, filename)
         print(f"Processing: {filename}")
         
-        # call previous function to extract and clean text
+        # Call previous function to extract and clean text
         text = extract_text_from_pdf(pdf_path)
 
         if not text:
