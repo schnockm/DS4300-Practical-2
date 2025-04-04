@@ -10,19 +10,19 @@ import faiss
 from redis.commands.search.query import Query
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
 
-VECTOR_DIM = 768
-INDEX_NAME = "embedding_index"
-DOC_PREFIX = "doc:"
-DISTANCE_METRIC = "COSINE"
-REDIS_HOST = "localhost"
-REDIS_PORT = 6379
-EMBEDDED_DIR = "/Users/victorzheng/Downloads/DS4300 Lectures/DS4300-Practical-2/data/embedded"
-MODEL_ALIASES = {
+vector_dim= 768
+index_name = "embedding_index"
+doc_prefix = "doc:"
+distance = "COSINE"
+redis_host = "localhost"
+redis_port = 6379
+embedded_dir = "/Users/victorzheng/Downloads/DS4300 Lectures/DS4300-Practical-2/data/embedded"
+model_aliases = {
     "mistral": "mistral:7b",
     "llama": "llama2:7b",
 }
 
-redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
+redis_client = redis.Redis(host=redis_host, port=redis_port, db=0)
 try:
     redis_client.ping()
     print("✅ Connected to Redis")
@@ -36,8 +36,9 @@ faiss_index = None
 faiss_texts = []
 
 def generate_llm_response(llm_model, prompt):
+    model = model_aliases.get(llm_model, llm_model)
     start = time.time()
-    response = ollama.chat(model=llm_model, messages=[
+    response = ollama.chat(model=model, messages=[
         {"role": "system", "content": "You are an AI tutor helping a student based on lecture notes."},
         {"role": "user", "content": prompt}
     ])
@@ -48,9 +49,9 @@ def load_embedded_data(chunk_size, overlap=0, clean=False):
     texts = []
     embeddings = []
 
-    for file in os.listdir(EMBEDDED_DIR):
+    for file in os.listdir(embedded_dir):
         if f"chunks_{chunk_size}_" in file and file.endswith("_embedded.json"):
-            with open(os.path.join(EMBEDDED_DIR, file), "r") as f:
+            with open(os.path.join(embedded_dir, file), "r") as f:
                 data = json.load(f)
                 for entry in data:
                     text = entry.get("chunk")
@@ -82,12 +83,12 @@ def clear_redis():
     redis_client.flushdb()
 def create_redis_index():
     try:
-        redis_client.execute_command(f"FT.DROPINDEX {INDEX_NAME} DD")
+        redis_client.execute_command(f"FT.DROPINDEX {index_name} DD")
     except redis.exceptions.ResponseError:
         pass
     redis_client.execute_command(
-        f"""FT.CREATE {INDEX_NAME} ON HASH PREFIX 1 {DOC_PREFIX}
-            SCHEMA text TEXT embedding VECTOR HNSW 6 TYPE FLOAT32 DIM {VECTOR_DIM} DISTANCE_METRIC {DISTANCE_METRIC}""")
+        f"""FT.CREATE {index_name} ON HASH PREFIX 1 {doc_prefix}
+            SCHEMA text TEXT embedding VECTOR HNSW 6 TYPE FLOAT32 DIM {vector_dim} DISTANCE_METRIC {distance}""")
 
 def index_redis(embeddings, texts):
     clear_redis()
@@ -97,7 +98,7 @@ def index_redis(embeddings, texts):
 
 def query_redis(query_vec):
     q = Query("*=>[KNN 10 @embedding $vec AS score]").sort_by("score").return_fields("text", "score").dialect(2)
-    results = redis_client.ft(INDEX_NAME).search(q, query_params={"vec": query_vec.tobytes()})
+    results = redis_client.ft(index_name).search(q, query_params={"vec": query_vec.tobytes()})
     return [doc.text for doc in results.docs]
 
 def normalize_vec(vec):
@@ -139,12 +140,8 @@ def query_faiss(query_vec):
     return [faiss_texts[i] for i in I[0] if i != -1]
 
 def embed_query(query, model="mistral"):
-    if model == "mistral":
-        return np.array(ollama.embeddings(model="mistral:7b", prompt=query)["embedding"], dtype=np.float32)[:VECTOR_DIM]
-    elif model == "llama":
-        return np.array(ollama.embeddings(model="llama2:7b", prompt=query)["embedding"], dtype=np.float32)[:VECTOR_DIM]
-    else:
-        raise ValueError("Model must be 'mistral' or 'llama'")
+    model = MODEL_ALIASES.get(model, model)
+    return np.array(ollama.embeddings(model=model, prompt=query)["embedding"], dtype=np.float32)[:VECTOR_DIM]
 
 def chat():
     chunk_size = int(input("Enter chunk size (100, 500, 1000): "))
