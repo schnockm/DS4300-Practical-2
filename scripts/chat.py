@@ -140,8 +140,8 @@ def query_faiss(query_vec):
     return [faiss_texts[i] for i in I[0] if i != -1]
 
 def embed_query(query, model="mistral"):
-    model = MODEL_ALIASES.get(model, model)
-    return np.array(ollama.embeddings(model=model, prompt=query)["embedding"], dtype=np.float32)[:VECTOR_DIM]
+    model = model_aliases.get(model, model)
+    return np.array(ollama.embeddings(model=model, prompt=query)["embedding"], dtype=np.float32)[:vector_dim]
 
 def chat():
     chunk_size = int(input("Enter chunk size (100, 500, 1000): "))
