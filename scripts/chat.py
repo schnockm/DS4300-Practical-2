@@ -36,14 +36,12 @@ except redis.ConnectionError as e:
 chroma_client = chromadb.Client()
 faiss_index = None
 faiss_texts = []
-
 def generate_llm_response(llm_model, prompt):
     model = model_aliases.get(llm_model, llm_model)
     start = time.time()
     response = ollama.chat(model=model, messages=[
         {"role": "system", "content": "You are an AI tutor helping a student based on lecture notes."},
-        {"role": "user", "content": prompt}
-    ])
+        {"role": "user", "content": prompt}])
     elapsed = time.time() - start
     return response["message"]["content"].strip(), elapsed
 
@@ -89,8 +87,8 @@ def create_redis_index():
         pass
     redis_client.execute_command(
         f"""FT.CREATE {index_name} ON HASH PREFIX 1 {doc_prefix}
-            SCHEMA text TEXT embedding VECTOR HNSW 6 TYPE FLOAT32 DIM {vector_dim} DISTANCE_METRIC {distance}"""
-    )
+            SCHEMA text TEXT embedding VECTOR HNSW 6 TYPE FLOAT32 DIM {vector_dim} 
+            DISTANCE_METRIC {distance}""")
 
 def index_redis(embeddings, texts):
     clear_redis()
@@ -138,20 +136,17 @@ def query_faiss(query_vec):
 def embed_query(query, model="mistral"):
     model = model_aliases.get(model, model)
     return np.array(ollama.embeddings(model=model, prompt=query)["embedding"], dtype=np.float32)[:vector_dim]
-
 def log_response(data):
     os.makedirs(os.path.dirname(log_path), exist_ok=True)
     with open(log_path, "a") as f:
         json.dump(data, f, indent=2)
         f.write("\n")
-
 def chat():
     chunk_size = int(input("Enter chunk size (100, 500, 1000): "))
     db = input("Choose vector DB (redis, chroma, or faiss): ").lower()
     llm = input("Choose LLM (mistral or llama): ").lower()
     overlap = int(input("Overlap characters (0, 50, 100): "))
     clean = input("Clean text? (y/n): ").lower() == "y"
-
     print("\n🔄 Loading precomputed embeddings...")
     embeddings, texts = load_embedded_data(chunk_size, overlap, clean)
 
@@ -212,9 +207,7 @@ def chat():
                 "retrieval_time_sec": round(retrieval_time, 4),
                 "llm_response_time_sec": round(response_time, 4),
                 "memory_before_MB": round(mem_before, 2),
-                "memory_after_MB": round(mem_after, 2),
-            }
-        })
+                "memory_after_MB": round(mem_after, 2),}})
 
 if __name__ == "__main__":
     chat()
