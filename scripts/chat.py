@@ -17,6 +17,10 @@ DISTANCE_METRIC = "COSINE"
 REDIS_HOST = "localhost"
 REDIS_PORT = 6379
 EMBEDDED_DIR = "/Users/victorzheng/Downloads/DS4300 Lectures/DS4300-Practical-2/data/embedded"
+MODEL_ALIASES = {
+    "mistral": "mistral:7b",
+    "llama": "llama2:7b",
+}
 
 redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
 try:
