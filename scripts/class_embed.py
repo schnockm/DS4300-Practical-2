@@ -73,8 +73,6 @@ def rag_answer(question: str, k: int = 3, model: str = "llama3.2:latest"):
     print(f"\nQuestion: {question}")
     embedding = get_embedding(question)
 
-    query = f"*=>[KNN {k} @embedding $vec AS vector_distance]"
-
     q = (
         Query("*=>[KNN 3 @embedding $vec AS vector_distance]")
         .sort_by("vector_distance")
