@@ -15,7 +15,7 @@ Tools Used:
 - Vector Databases: Redis Vector DB, Chroma, and FAISS.
 - Embedding Models: sentence-transformers/all-MPNet-base-v2 and others.
 
-P## roject Structure
+## Project Structure
 
 DS4300-Practical-2/
 │
@@ -34,13 +34,11 @@ DS4300-Practical-2/
     └── chat_response_log.json # Log of query responses and metrics.
 
 
-Setup
+## Setup
 Clone the repository:
-Copy
 git clone https://github.com/schnockm/DS4300-Practical-2.git
 Install dependencies: Ensure Python 3.8+ is installed, then install the necessary libraries:
 
-Copy
 pip install -r requirements.txt
 Install Redis (for Redis Vector DB):
 - Follow the Redis installation guide if Redis is not yet installed on your system.
