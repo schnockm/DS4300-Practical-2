@@ -16,9 +16,7 @@ Tools Used:
 - Embedding Models: sentence-transformers/all-MPNet-base-v2 and others.
 
 ## Project Structure
-
-<img width="749" alt="Screenshot 2025-04-04 at 10 00 02 PM" src="https://github.com/user-attachments/assets/985fa6e2-c000-4ef7-9c96-080d63a14c6e" />
-
+<img width="888" alt="Screenshot 2025-04-04 at 10 47 54 PM" src="https://github.com/user-attachments/assets/d40287e6-9072-47dc-a278-13ed919cd2d7" />
 
 ## Setup
 Clone the repository:
