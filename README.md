@@ -17,6 +17,7 @@ Tools Used:
 
 ## Project Structure
 
+<img width="749" alt="Screenshot 2025-04-04 at 10 00 02 PM" src="https://github.com/user-attachments/assets/985fa6e2-c000-4ef7-9c96-080d63a14c6e" />
 DS4300-Practical-2/
 │
 ├── data/
