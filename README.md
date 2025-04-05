@@ -68,6 +68,7 @@ This script indexes text chunks using Redis and allows retrieval-augmented gener
 
 Python packages:
 - pip install redis numpy
+
 Running the Script:
 - Ensure your chunked text files are located in the data/chunked_500 directory relative to the project root.
 - Start Redis with RediSearch on port 6380.
