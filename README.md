@@ -18,21 +18,6 @@ Tools Used:
 ## Project Structure
 
 <img width="749" alt="Screenshot 2025-04-04 at 10 00 02 PM" src="https://github.com/user-attachments/assets/985fa6e2-c000-4ef7-9c96-080d63a14c6e" />
-DS4300-Practical-2/
-│
-├── data/
-│   ├── chunked_100/
-│   ├── chunked_500/
-│   ├── chunked_1000/
-│   └── embedded/
-├── scripts/
-│   ├── chat.py            # Main driver script for querying the system.
-│   ├── embed_mpnet.py     # Script to embed chunked text using MPNet.
-│   └── preprocess_text.py # Script for preprocessing PDF notes and chunking text.
-│   └── miniLM_comparison_script # Script to compare vector DBs and LLMs with miniLM embeddings. 
-│   └── miniLM_interactive.py # Interactive chat with the best combination for miniLM. 
-└── results/
-    └── chat_response_log.json # Log of query responses and metrics.
 
 
 ## Setup
