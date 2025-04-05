@@ -63,4 +63,12 @@ The system allows for systematic experimentation with different configurations:
 - Run miniLM_comparison_script.py to generate responses based of different vector DBs, chunking strategies, and LLM choices. May need to change location of redis port, and data directories to point to the correct chunked texts.
 - Similar to miniLM_comparison_script.py, will need to ensure redis and data directories are updated to run miniLM_interactive.py
 
+## Nomic Embedding Script
+This script indexes text chunks using Redis and allows retrieval-augmented generation (RAG) to answer questions using context from those indexed chunks.
 
+Python packages:
+- pip install redis numpy
+Running the Script:
+- Ensure your chunked text files are located in the data/chunked_500 directory relative to the project root.
+- Start Redis with RediSearch on port 6380.
+- Start the ollama server and make sure the embedding model (e.g., nomic-embed-text) and the chat model (e.g., llama3.2:latest) are pulled and ready.
