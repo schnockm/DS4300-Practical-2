@@ -31,7 +31,7 @@ Install Redis (for Redis Vector DB):
 Install Ollama for LLM inference:
 - Follow the Ollama installation guide to set up Ollama for local LLM use.
 
-## Running the Project
+## How to run MPNet Script
 1. Preprocess the PDF Notes
 Run the preprocess_text.py script to extract and chunk the PDF notes into different sizes (100, 500, 1000 tokens).
 This will:
